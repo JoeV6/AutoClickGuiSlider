@@ -3,15 +3,15 @@ package com.LPC1.Lmod.injection.clicker.listeners;
 
 import com.LPC1.Lmod.injection.clicker.calcs.GenerateSequence;
 import com.LPC1.Lmod.injection.setup.Setup;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.LPC1.Lmod.injection.clicker.gui.utils.MessageUtils.sendMessage;
 
 public class CommandListener implements ICommand {
 
@@ -48,38 +48,38 @@ public class CommandListener implements ICommand {
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] strings) {
         if (strings.length == 0) {
-            sendMessage("");
-            sendMessage("mod (on/off)");
-            sendMessage("mod maxcps (1-20)");
-            sendMessage("mod mincps (1-20)");
-            sendMessage("mod cps (on / off)");
-            sendMessage("");
+            sendMessage("", false);
+            sendMessage("mod (on/off)", true);
+            sendMessage("mod maxcps (1-20)", true);
+            sendMessage("mod mincps (1-20)", true);
+            sendMessage("mod cps (on / off)", true);
+            sendMessage("", false);
         }
         if (strings[0].equalsIgnoreCase("on")) {
             setup.getClickerOn().setOn(true);
             setup.getFirstList().setOn(true);
-            sendMessage("Clicker turned on");
+            sendMessage("Clicker turned on", true);
             new GenerateSequence(setup.getMaxSpeed().getValue(), setup.getMinSpeed().getValue(), 20, setup);
         }
 
         if (strings[0].equalsIgnoreCase("off")) {
             setup.getClickerOn().setOn(false);
-            sendMessage("Clicker turned off");
+            sendMessage("Clicker turned off", true);
         }
         if (strings[0].equalsIgnoreCase("cps") && strings[1].equalsIgnoreCase("off")) {
             setup.getCpsOn().setOn(false);
-            sendMessage("CPS turned off");
+            sendMessage("CPS turned off", true);
         }
         if (strings[0].equalsIgnoreCase("cps") && strings[1].equalsIgnoreCase("on")) {
             setup.getCpsOn().setOn(true);
-            sendMessage("CPS turned on");
+            sendMessage("CPS turned on", true);
         }
         if (strings[0].equalsIgnoreCase("maxcps") && strings[1].matches("[0-9]+")) {
 
             if (Integer.parseInt(strings[1]) <= 20 && Integer.parseInt(strings[1]) >= setup.getMinSpeed().getValue()) {
                 setup.getMaxSpeedSet().setOn(true);
                 setup.getMaxSpeed().setValue(Integer.parseInt(strings[1]));
-                sendMessage("MaxCPS set to " + Integer.parseInt(strings[1]));
+                sendMessage("MaxCPS set to " + Integer.parseInt(strings[1]), true);
             }
 
         }
@@ -88,7 +88,7 @@ public class CommandListener implements ICommand {
             if (Integer.parseInt(strings[1]) <= 20 && Integer.parseInt(strings[1]) <= setup.getMaxSpeed().getValue()) {
                 setup.getMinSpeedSet().setOn(true);
                 setup.getMinSpeed().setValue(Integer.parseInt(strings[1]));
-                sendMessage("MinCPS set to " + Integer.parseInt(strings[1]));
+                sendMessage("MinCPS set to " + Integer.parseInt(strings[1]), true);
             }
         }
     }
@@ -113,7 +113,4 @@ public class CommandListener implements ICommand {
         return 0;
     }
 
-    public static void sendMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(message));
-    }
 }

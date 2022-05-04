@@ -17,11 +17,9 @@ public class GenerateSequence {
     public GenerateSequence(int MAX, int MIN, int T, Setup setup) {
 
         this.setup = setup;
-
         Minecraft mc = Minecraft.getMinecraft();
 
-
-        if (setup.getMaxSpeedSet().isOn() && setup.getMinSpeedSet().isOn() && mc.thePlayer != null && mc.theWorld != null) {
+        if (setup.getMinSpeed().getValue() < setup.getMaxSpeed().getValue() && setup.getMinSpeed().getValue() != 0 && setup.getMaxSpeed().getValue() != 0 && mc.thePlayer != null && mc.theWorld != null) {
 
             setup.getListGenerated().setOn(false);
 
@@ -31,7 +29,7 @@ public class GenerateSequence {
 
                 int percentage = r.nextInt(100);
 
-                if (setup.getFirstList().isOn()) {
+                if (setup.getFirstList().isOn()) { //if first list add to ClickList
                     if (percentage > (20 - (MIN + MAX) / 2) / 0.20 && setup.getClickCount().getValue() < setup.getMaxSpeed().getValue()) {
 
                         ClickList.add(1);
@@ -42,7 +40,7 @@ public class GenerateSequence {
                         ClickList.add(0);
 
                     }
-                } else {
+                } else { //if not first list add to ClickList
 
 
                     if ((percentage > ((20 - setup.getTemp().getValue()) / 0.20)) && setup.getClickCount().getValue() < setup.getMaxSpeed().getValue()) {
@@ -57,7 +55,8 @@ public class GenerateSequence {
                 }
             }
 
-            if (!setup.getFirstList().isOn()) {
+            if (!setup.getFirstList().isOn()) { //if not firstlist check if value =+- temp otherwise generate new
+
                 if ((setup.getTemp().getValue() == setup.getClickCount().getValue() || setup.getTemp().getValue() == (setup.getClickCount().getValue() + 1) || setup.getTemp().getValue() == (setup.getClickCount().getValue() - 1)) && MIN < setup.getClickCount().getValue() && setup.getClickCount().getValue() < MAX) {
 
                     setup.getListGenerated().setOn(true);
@@ -76,7 +75,7 @@ public class GenerateSequence {
                     new GenerateSequence(setup.getMaxSpeed().getValue(), setup.getMinSpeed().getValue(), 20, setup);
 
                 }
-            } else {
+            } else { //if firstlist check if value is in between MAX and MIN otherwise generate new
 
                 if (MIN <= setup.getClickCount().getValue() && setup.getClickCount().getValue() < MAX) {
 

@@ -1,7 +1,7 @@
 package com.LPC1.Lmod.injection.clicker.listeners;
 
 import com.LPC1.Lmod.injection.clicker.calcs.GenerateSequence;
-import com.LPC1.Lmod.injection.clicker.gui.Gui;
+import com.LPC1.Lmod.injection.clicker.gui.MainGui;
 import com.LPC1.Lmod.injection.setup.Setup;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.MouseEvent;
@@ -14,7 +14,8 @@ import org.lwjgl.input.Mouse;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static com.LPC1.Lmod.injection.clicker.gui.ColorUtils.refreshColors;
+import static com.LPC1.Lmod.injection.clicker.gui.utils.ColorUtils.refreshColors;
+import static com.LPC1.Lmod.injection.clicker.gui.utils.MessageUtils.sendMessage;
 
 
 public class EventListener {
@@ -44,8 +45,9 @@ public class EventListener {
         setup.getClickCount().setValue(0);
         setup.getTemp().setValue(0);
 
-        setup.getMaxSpeed().setValue(20);
-        setup.getMinSpeed().setValue(10);
+        setup.getMaxSpeed().setValue(0);
+        setup.getMinSpeed().setValue(0);
+
         setup.getMaxSpeedSet().setOn(true);
         setup.getMinSpeedSet().setOn(true);
 
@@ -68,11 +70,11 @@ public class EventListener {
 
             Ticks = 0;
 
-            if ((setup.getButtonStateClicker().isClicked() || setup.getClickerOn().isOn())) {
+            if (setup.getClickerOn().isOn()) {
                 new GenerateSequence(setup.getMaxSpeed().getValue(), setup.getMinSpeed().getValue(), 20, setup);
             }
             if (setup.getCpsOn().isOn() && mc.gameSettings.keyBindAttack.isKeyDown() && Mouse.isButtonDown(0)) {
-                CommandListener.sendMessage("CPS " + Clicks / 2);
+                sendMessage("CPS " + Clicks / 2, true);
             }
 
             Clicks = 0;
@@ -87,7 +89,7 @@ public class EventListener {
 
         if (event.phase == TickEvent.Phase.END) {
             if (Keyboard.isKeyDown(Keyboard.KEY_O) && mc.currentScreen == null) {
-                mc.displayGuiScreen(new Gui(setup));
+                mc.displayGuiScreen(new MainGui(setup));
             }
         }
     }

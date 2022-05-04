@@ -1,7 +1,7 @@
 package com.LPC1.Lmod.injection.setup;
 
-import com.LPC1.Lmod.injection.clicker.ConstructorSaver;
-import com.LPC1.Lmod.injection.clicker.gui.customfont.FontUtil;
+import com.LPC1.Lmod.injection.clicker.handler.ConstructorSaver;
+import com.LPC1.Lmod.injection.clicker.gui.utils.customfont.FontUtil;
 import com.LPC1.Lmod.injection.clicker.listeners.CommandListener;
 import com.LPC1.Lmod.injection.clicker.listeners.EventListener;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -14,8 +14,26 @@ import java.awt.*;
 @Mod(modid = Setup.MODID, version = Setup.VERSION)
 public class Setup {
 
+    public static Setup INSTANCE;
+
     public static final String MODID = "LPC1";
     public static final String VERSION = "1.0";
+
+    public Setup() throws AWTException {
+
+        ClientCommandHandler.instance.registerCommand(new CommandListener(this));
+        MinecraftForge.EVENT_BUS.register(new EventListener(this));
+
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(FMLPostInitializationEvent event) {
+        INSTANCE = this;
+        FontUtil.bootstrap();
+        System.out.println("Initialized font ---------------------------------------------------------------------");
+    }
+
+
 
     private final ConstructorSaver listGenerated = new ConstructorSaver();
     private final ConstructorSaver maxSpeedSet = new ConstructorSaver();
@@ -30,19 +48,6 @@ public class Setup {
     private final ConstructorSaver temp = new ConstructorSaver();
     private final ConstructorSaver fontHeight = new ConstructorSaver();
 
-
-    public Setup() throws AWTException {
-
-        ClientCommandHandler.instance.registerCommand(new CommandListener(this));
-        MinecraftForge.EVENT_BUS.register(new EventListener(this));
-
-    }
-
-    @Mod.EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
-        FontUtil.bootstrap();
-        System.out.println("Initialized font ---------------------------------------------------------------------");
-    }
 
     public ConstructorSaver getListGenerated() {
         return listGenerated;
